@@ -1,0 +1,330 @@
+%% Run LaTeX on this file several times to get Table of Contents,
+%% cross-references, and citations.
+
+\documentclass[11pt]{book}
+\usepackage{gvv-book}
+\usepackage{gvv}
+\usepackage[sectionbib,authoryear]{natbib}% for name-date citation comment the below line
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+\makeindex
+\frontmatter
+\begin{document}
+\tableofcontents
+\setcounter{page}{0}
+\mainmatter
+
+\chapter{Triangle}
+
+Consider a triangle with vertices and midpoints      \begin{align}                                        \vec{A} = \myvec{-6 \\ -5},                    \vec{B} = \myvec{-6 \\ 1},
+\vec{C} = \myvec{1 \\ -5}\\                         \vec{D} = \myvec{\frac{-5}{2} \\ -2}
+\vec{E} = \myvec{\frac{-5}{2} \\ -5},
+\vec{F} = \myvec{-6 \\ -2}
+\end{align}
+
+\section{Perpendicular Bisector}
+\begin{enumerate}[label=\thesection.\arabic*.,ref=\thesection.\theenumi]
+\numberwithin{equation}{enumi}
+
+%Question 1.1.1:
+\item The equation of the perpendicular bisector of $BC$ is
+		\begin{align}
+			\label{eq:tri-perp-bisect}
+			\brak{\vec{x}-\frac{\vec{B}+\vec{C}}{2}}\brak{\vec{B}-\vec{C}} = 0
+		\end{align}
+		Substitute numerical values and find the equations of the perpendicular bisectors of $AB, BC$ and $CA$.\\
+\solution\\
+On substituting the values,
+\begin{align}
+\vec{\frac{\vec{B}+\vec{C}}{2}} &= \myvec{\frac{-5}{2} \\ -2},\,
+\vec{B}-\vec{C} = \myvec{-7 \\ 6} 
+\\
+\vec{\frac{\vec{A}+\vec{B}}{2}} &= \myvec{-6 \\ -2},\,
+\vec{A}-\vec{B}=\myvec{0 \\ -6} \\
+\vec{\frac{\vec{C}+\vec{A}}{2}} &= \myvec{\frac{-5}{2} \\ -5},\,
+\vec{C}-\vec{A} = \myvec{7 \\ 0} \\
+\end{align}
+yielding
+\begin{alignat}{2}
+  \brak{\vec{B}-\vec{C}}^{\top}\brak{\frac{\vec{B}+\vec{C}}{2}} 
+	&= \myvec{-7 & 6}\myvec{\frac{-5}{2} \\ -2}
+	&&= \frac{11}{2}
+  \\
+\brak{\vec{A}-\vec{B}}^{\top}\brak{\frac{\vec{A}+\vec{B}}{2}}
+	&= \myvec{0 & -6}\myvec{-6 \\ 2}
+	&&= 12
+  \\
+\brak{\vec{C}-\vec{A}}^{\top}\brak{\frac{\vec{C}+\vec{A}}{2}}
+	&= \myvec{7 & 0}\myvec{\frac{-5}{2} \\ -5}
+	&&= \frac{-35}{2}
+\end{alignat}
+Thus, the perpendicular bisectors are obtained from as
+		\begin{alignat}{2}
+			BC&: \quad \myvec{-7 & 6}\vec{x} &&= \frac{11}{2}\\
+			CA&: \quad \myvec{7 & 0}\vec{x} &&= \frac{-35}{2}\\
+			AB&: \quad \myvec{0 & -6}\vec{x} &&= 12
+		\end{alignat}
+		\begin{figure}[H]
+\includegraphics[width=\columnwidth]{figs/Perpendicular bisector.png}
+\caption{Perpendicular Bisectors of $\triangle ABC$}
+\label{fig:Perpendicular bisectors }
+\end{figure}
+
+%Question 1.1.2:
+\item Find the intersection $\vec{O}$ of the perpendicular bisectors of $AB$ and $AC$.\\
+\solution\\
+Given vector equation of perpendicular bisector of $\vec{A}-\vec{B}$ is
+\begin{align}
+ (\vec{A}-\vec{B})^\top  \brak{ \vec{x} - \frac{\vec{A}+\vec{B}}{2}} = 0
+\end{align}
+where,
+\begin{align}
+\vec{A}+\vec{B} &= \myvec{-12 \\-4}\\
+\vec{A}-\vec{B} &= \myvec{0 \\ -6}\\
+\implies (\vec{A}-\vec{B})^\top &= \myvec{0 & -6}
+\end{align}
+$\therefore $ The vector equation of $\vec{O}-\vec{F}$ is
+\begin{align}
+\myvec{0 & -6} \brak{ \vec{x}-\myvec{-6 \\ -2} } &= 0\\
+\implies \myvec{0 & -6}\vec{x} &= \myvec{0 & -6}\myvec{-6 \\ -2}\\
+\myvec{0 & -6}\vec{x} &= 12 
+\end{align}\\
+Vector equation of perpendicular bisector of $\vec{A}-\vec{C}$ is
+\begin{align}
+(\vec{A}-\vec{C})^\top\brak{ \vec{x} - \frac{\vec{A}+\vec{C}}{2}} = 0
+\end{align}
+where,
+\begin{align}
+\vec{A}+\vec{C} &= \myvec{-5 \\ -10}\\
+\vec{A}-\vec{C} &= \myvec{ -7\\ 0}\\
+\implies (\vec{A}-\vec{C})^\top &= \myvec{-7 & 0}
+\end{align}
+$\therefore $ The vector equation of $\vec{O}-\vec{E}$ is
+\begin{align}
+\myvec{-7 & 0}\brak{ \vec{x}-\myvec{\frac{-5}{2}\\-5}} &= 0\\
+\implies \myvec{-7 & 0}\vec{x} &= \myvec{-7 & 0}\myvec{\frac{-5}{2}\\-5}\\
+\myvec{-7 & 0}\vec{x} &= \frac{35}{2}
+\end{align}
+Thus,
+\begin{align}
+\myvec{0 & -6& 12 \\ -7 & 0 & \frac{35}{2}} &\xleftrightarrow[]{R_1 \leftarrow R_2}
+\myvec{-7 & 0 & \frac{35}{2} \\ 0 & -6 & 12}\\
+&\xleftrightarrow[]{R_1 \leftarrow -R1/7}
+\myvec{1 & 0 & \frac{-5}{2} \\ 0 & -6 & 12}\\ 
+&\xleftrightarrow[]{R_2\leftarrow -R_2/6} \myvec{1 & 0 & \frac{-5}{2} \\ 0 & 1 & -2}
+\end{align}
+Therefore, the point of intersection of perpendicular bisectors of $\vec{A}-\vec{B}$ and $\vec{A}-\vec{C}$ is $\vec{O} = \myvec{\frac{-5}{2} \\ -2}$
+		\begin{figure}[H]
+\includegraphics[width=\columnwidth]{figs/OE_OF.png}
+			\caption{Perpendicular Bisectors $\vec{OE,OF }$of $\vec{AC,AB}$}
+\label{fig:Bisectors OE,OF}
+\end{figure}
+
+%Question 1.1.3:
+\item Verify that $\vec{O}$ satisfies
+			\eqref{eq:tri-perp-bisect}.
+$\vec{O}$ is known as the circumcentre.\\
+\solution\\
+ From the previous question we get,
+ \begin{align}
+	\vec{O} = \myvec{\frac{-5}{2} \\ -2}
+\end{align}
+when substituted in the above equation,
+\begin{align}
+	&= \brak{\vec{O}-\frac{\vec{B}+\vec{C}}{2}}.\brak{\vec{B}-\vec{C}}\\
+	&= \brak{\myvec{\frac{-5}{2} \\ -2}- \myvec{\frac{-5}{2} \\ -2}}^{\top} \myvec{-7 \\ 6}\\
+	&= \myvec{0 & 0}\myvec{-7 \\ 6}\\
+	&= 0
+\end{align}
+It is hence proved that $\vec{O}$ satisfies the equation \eqref{eq:tri-perp-bisect}
+\begin{figure}[H]                                         
+	\includegraphics[width=\columnwidth]{figs/OG.png}
+	\caption{Circumcenter($\vec{OG}$) of $\triangle ABC$}
+\label{fig:circumcenter OG}      
+\end{figure}
+
+%Question 1.1.4:
+\item Verify that 
+		\begin{align}
+			OA = OB = OC 
+		\end{align}
+  \solution\\
+Given,
+\begin{align}
+    \vec{O - A} &= \myvec{\frac{-5}{2} \\ -2} - \myvec{-6 \\ -5}\\
+    &= \myvec{\frac{7}{2} \\ 3}\\
+    \vec{O - B} &= \myvec{\frac{-5}{2} \\ -2} - \myvec{-6 \\ 1}\\
+    &= \myvec{\frac{7}{2} \\ 3}\\
+    \vec{O - A} &= \myvec{\frac{-5}{2} \\ -2} - \myvec{1 \\ -5}\\
+    &= \myvec{\frac{-7}{2} \\ 3}
+\end{align}
+By substituting the above values
+\begin{enumerate}
+\item 
+\begin{align}
+\vec{OA} &= \sqrt{(\vec{O}-\vec{A})^{\top}(\vec{O}-\vec{A})}\\
+&= \sqrt{\myvec{\frac{7}{2} & 3} \myvec{\frac{7}{2} \\ 3}}\\
+ &= \sqrt{\frac{7}{2}^2 + 3^2}\\
+ &= \frac{\sqrt{85}}{2}
+\end{align}
+\item 
+\begin{align}
+\vec{OB} &= \sqrt{(\vec{O}-\vec{B})^{\top}(\vec{O}-\vec{B})}\\
+ &= \sqrt{\myvec{\frac{7}{2} & -3} \myvec{\frac{7}{2} \\ -3}}\\
+ &= \sqrt{\frac{7}{2}^2 + -3^2}\\
+ &= \frac{\sqrt{85}}{2}
+\end{align}
+\item 
+\begin{align}
+OC &= \sqrt{(\vec{O}-\vec{C})^{\top}(\vec{O}-\vec{C})}\\
+ &= \sqrt{\myvec{\frac{-7}{2} & 3}  \myvec{\frac{-7}{2} \\ 3}}\\
+&= \sqrt{\frac{7}{2}^2 + 3^2}\\
+ &= \frac{\sqrt{85}}{2}
+\end{align}
+\end{enumerate}
+From above, 
+\begin{align}
+\vec{OA = OB = OC}
+\end{align}
+
+%Question 1.1.5:
+	\item Draw the circle with centre at $\vec{O}$ and radius 
+		\begin{align}
+			\vec{R = OA}
+		\end{align}
+		This is known as the {\em circumradius}. \\
+  \solution\\
+  \begin{align}
+\vec{O} = \myvec{\frac{-5}{2} \\ -2}
+\end{align}
+Now we will calculate the radius,
+\begin{align}
+      R &= OA\\
+        &= \norm{\vec{A} - \vec{O}}\\
+        &= \norm{\myvec{-6 \\ -5} - \myvec{\frac{-5}{2} \\ -2}}\\
+        &= \norm{\myvec{\frac{-7}{2} \\ -3}}\\
+        &= \frac{\sqrt{85}}{2}
+\end{align}
+\begin{figure}[H]                                                                                       \includegraphics[width=\columnwidth]{figs/circumference.png}
+        \caption{Circumcircle of $\triangle ABC$ with center $\vec{O}$}
+\label{fig:circumcircle}
+\end{figure}
+
+%Question 1.1.6:
+\item Verify that 
+		\begin{align}
+			\angle BOC = 2\angle BAC.
+		\end{align}\\
+\solution\\
+We have a point $\vec{O} = \myvec{\frac{-5}{2} \\ -2}$
+which is intersection point of the perpendicular bisectors of AB and AC and is circumcentre of the triangle made by points A,B and C.
+
+\begin{enumerate}
+\item To find  the value of $\angle{BOC}$ :
+\begin{align}
+\vec{B}-\vec{O}
+          &= \myvec{\frac{-7}{2} \\ 3}\\
+\vec{C}-\vec{O}
+          &= \myvec{\frac{7}{2} \\ -3}
+\end{align}
+calculating the norm of $\vec{B}-\vec{O}$ and $\vec{C}-\vec{O}$,we get:
+\begin{align}
+	\norm{\vec{B}-\vec{O}} &= \frac{\sqrt{85}}{2}\\
+	\norm{\vec{C}-\vec{O}} &= \frac{\sqrt{85}}{2}
+\end{align}
+by doing matrix multiplication, we get:
+\begin{align}
+\brak{\vec{B}-\vec{O}}^{\top}\brak{\vec{C}-\vec{O}} &= \frac{{-85}}{4}
+\end{align}
+to calcuate the $\angle{BOC}$:
+\begin{align}
+\cos{BOC} &= \frac{\brak{\vec{B}-\vec{O}}^{\top}\brak{\vec{C}-\vec{O}}}{\norm{\vec{B}-\vec{O}}\norm{\vec{C}-\vec{O}}}\\
+&= \frac{\frac{{-85}}{4}}{\frac{\sqrt{85}}{2}\times\frac{\sqrt{85}}{2}}\\
+&= -1\\
+\implies\angle{BOC}&=\cos^{-1}\brak{-1}\\
+	&= 180\degree
+\end{align}
+Taking the reflex of above angle we get
+		\begin{align}
+			\angle{BOC} &= 360\degree - 180\degree
+			&= 180\degree\label{eq:1}
+		\end{align}
+
+	\item To find  the value of $\angle{BAC}$ :
+\begin{align}
+\vec{B}-\vec{A} &= \myvec{0\\6}\\
+\vec{C}-\vec{A} &= \myvec{7\\0}
+\end{align}
+calculating the norm of $\vec{B}-\vec{A}$ and $\vec{C}-\vec{A}$,we get:
+\begin{align}
+	\norm{\vec{B}-\vec{A}} &= 6\\
+	\norm{\vec{C}-\vec{A}} &= 7
+\end{align}
+by doing matrix multiplication, we get:
+\begin{align}
+\brak{\vec{B}-\vec{A}}^{\top}\brak{\vec{C}-\vec{A}} &= 0
+\end{align}
+to calcuate the $\angle{BAC}$:
+\begin{align}
+\cos{BAC} &= \frac{\brak{\vec{B}-\vec{A}}^{\top}\brak{\vec{C}-\vec{A}}}{\norm{\vec{B}-\vec{A}}\norm{\vec{C}-\vec{A}}}\\
+&= \frac{0}{6\times7}\\
+&= 0\\
+	\implies\angle{BAC} &= \cos^{-1}\brak{0}\\
+&= 90\degree \label{eq:2}
+\end{align}
+from equation \eqref{eq:2}: 
+\begin{align}
+2\times\angle{BAC} = 180\degree \label{eq:3}
+\end{align}
+On comparing equation \eqref{eq:1} and equation \eqref{eq:3}:
+\begin{align}
+\angle{BOC} = 2\times\angle{BAC}
+\end{align}
+Hence,verified.
+\end{enumerate}
+
+%Question 1.1.7
+\item Let 
+\begin{align}
+\vec{P} = \myvec{\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta}
+\end{align}
+Find $\theta$ if 
+\begin{align}
+\vec{C}-\vec{O}=\vec{P}\brak{\vec{A}-\vec{O}}
+\end{align}
+\solution
+\begin{align}
+    \vec{C}-\vec{O}
+	  & =\myvec{ \frac{7}{2} \\ -3 }\\
+\vec{A}-\vec{O}
+	 & =\myvec{\frac{-7}{2} \\ -3}
+	  \\
+\vec{P} &= \myvec{\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta} \\
+   \vec{C}-\vec{O}&=\vec{P}\brak{\vec{A}-\vec{O}} \label{eq:1.4.7.6}
+\end{align}
+ Now from \eqref{eq:1.4.7.6}
+ \begin{align}
+ \myvec{\frac{7}{2}\\ -3} &= \myvec{\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta} \myvec{\frac{-7}{2}\\ -3}    
+ \end{align}
+solving using matrix multiplication,we get
+\begin{align}
+	\myvec{\frac{7}{2}\\ -3} &= \myvec{ \frac{-7}{2}\cos\theta + 3\sin\theta \\ \frac{-7}{2}\sin\theta - 3\cos\theta}
+\end{align}
+Comparing on Both sides ,we get
+\begin{align}
+     \frac{-7}{2}\cos\theta + 3\sin\theta &= \frac{7}{2}   \label{eq:1.4.7.9}\\
+ \frac{-7}{2}\sin\theta - 3\cos\theta &= -3 \label{eq:1.4.7.10}
+\end{align}
+On solving equations \eqref{eq:1.4.7.9}  and \eqref{eq:1.4.7.10}
+\begin{align}
+    \cos\theta&= \frac{13}{85} \\
+    \sin\theta&= \frac{84}{85} \\
+    \theta &=\cos^{-1}\frac{13}{85} \\
+            &= 81.2025 \\
+	    \therefore \theta &= 81.2025
+\end{align}
+\end{enumerate}
+
+\latexprintindex
+\end{document}
