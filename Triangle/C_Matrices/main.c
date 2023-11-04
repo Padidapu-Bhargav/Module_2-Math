@@ -71,11 +71,11 @@ printMat(G_dis,1,3);
 //***************************************END OF VECTORS*************************************
 
 //******************************************MEDIAN******************************************
-printf(" MEDIANS \n");
+printf("\n\nMEDIANS \n");
 
 //mid points
 double **M_P=Mid_point(A,B,C);
-printf("\nMEDIAN\n\nMID POINTS\n");
+printf("\nMID POINTS\n");
 printMat(M_P,2,3);
 
 D=Matcol(M_P,2,0);
@@ -122,7 +122,7 @@ printMat(G_G,1,2);
 
 //***************************************ALTITUDE******************************************
 
-printf("\nALTITUDE\n");
+printf("\n\nALTITUDE\n");
 printf("\nAltitude normal matrix\n");
 m5 = p_m(m2,m3,m1,2,3);
 printMat(m5,2,3);
@@ -140,7 +140,7 @@ printMat(G_H,1,2);
 //***************************************END OF ALTITUDE************************************
 
 //***************************************PERPENDICULAR BISECTOR*****************************
-printf("\nPERPENDICULAR BISECTOR\n");
+printf("\n\nPERPENDICULAR BISECTOR\n");
 c1 = Matdot(m2,D,2);
 c2 = Matdot(m3,E,2);
 c3 = Matdot(m1,F,2);
@@ -160,7 +160,7 @@ double **C_in= createMat(3,3);
 C_in=loadMat("C_in.dat",3,3);
 
 //M,N,P values
-printf("\nANGULAR BISECTOR\n");
+printf("\n\nANGULAR BISECTOR\n");
 printf("m,n,p\n");
 double **secvec=Matscale(Matmul(G_dis,C_in, 1,3,3),1,3,0.5);
 printMat(secvec,1,3);
