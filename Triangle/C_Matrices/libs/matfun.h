@@ -23,30 +23,9 @@ double **Mid_point(double **A,double **B,double **C);
 double **h_concat(double **a, double **b, int m, int n, int p, int q);
 double **line_intersect(double **a,int m,int n);
 double **matrix(double c1,double c2,double c3);
-double **diag(double **a,int m,int n);
+
 //End function declaration
 
-
-//defining function for generating diagonal matrix
-double **diag(double **a ,int m ,int n)
-{
-if(m==n)
-{
-int i;
-double **d;
-d=createMat(1,m);
-	for(i=0;i<m;i++)
-	{
-	d[0][i]=a[i][i];
-	}
-	return d;
-}
-else
-{
-	printf("Dimensional error");
-}
-}
-//end function for diagonal matrix generation
 
 double **matrix(double c1,double c2,double c3){
      double **c;
