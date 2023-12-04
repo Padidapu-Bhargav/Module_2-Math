@@ -267,8 +267,7 @@ double **u=createMat(2,1);
         u[0][0]=G_I[0][0]-G_I[0][0];
 	u[1][0]=G_I[0][1]-G_I[0][1];
 double **f=createMat(1,1);
-        f[0][0]=sqrt(pow(G_I[0][0]-G_i[0][0],2)+pow(G_I[0][1]-G_i[1][0],2));
-        f[0][0]=-f[0][0]*f[0][0];
+        f[0][0]=-(r*r);
 double **gh=Matadd(Matadd(Matmul(Matmul(transposeMat(h,2,1),V,1,2,2),h,1,2,1), Matscale( Matmul(transposeMat(u,2,1),h,1,2,1),1,1,2) ,1,1),f,1,1);
 double **sigmat=Matsub(Matmul(Matadd(Matmul(V,h,2,2,1),u,2,1),transposeMat(Matadd(Matmul(V,h,2,2,1),u,2,1),2,1),2,1,2) ,Matscale(V,2,2,gh[0][0]) ,2,2);
 
