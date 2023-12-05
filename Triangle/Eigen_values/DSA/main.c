@@ -55,18 +55,17 @@ avyuh *R_o = rotList(M_PI/2);
 	 	avyuh *G_O=line_intersect(linemat_perp_bis);
 //*****************************ANGULAR BISECTOR*************************************
 		avyuh *secvec=Listmul(G_dis,C_in);
-		avyuh *i_con =sample_assign(secvec,G_dis);
+		avyuh *i_con = sample_assign(secvec,G_dis);
+
 		avyuh *a_dir=Listmul(G_v,i_con);
 		avyuh *a_nor=Listmul(R_o,a_dir);
                 avyuh *a_cof= Listdiag(Listmul(transposeList(a_nor),G_v));
                 avyuh *a_line=Liststack(a_nor,a_cof);
                 avyuh *a_i=line_intersect(a_line);
 		avyuh *cont_mat=i_con;
-
 cont_mat->vector->data=0;
 cont_mat->next->vector->next->data=0;
 cont_mat->next->next->vector->next->next->data=0;
-
 		avyuh *G_i=Listmul(G_v,cont_mat);
 		avyuh *G_imid=Listmul(G_i,C_mid);
 		avyuh *G_idir_alt = Listmul(G_i,C_alt);
@@ -74,29 +73,32 @@ cont_mat->next->next->vector->next->next->data=0;
 		avyuh *linemat_imed=Liststack(G_idir_alt,cmat_iperp_bis);
 		avyuh *G_I=line_intersect(linemat_imed);
 
-//radius
-avyuh *z;
-z=Listcol(G_i,0);//print 0th column of contact points 
-double r;
-avyuh *b3=Listsub(G_I,z);// subtracted matrix I-D3
-r=Listnorm(b3);
+
+
 
 //******************Eigen value approach to find contact points********************************
 	avyuh *h=createList(2,1);
+	//shifting the incentre to origin for finding the eigen values
 	h->vector->data=G_v->vector->data-G_I->vector->data; 
 	h->next->vector->data=G_v->next->vector->data-G_I->vector->next->data;
 	avyuh *V=createList(2,2);
 	V=Listeye(2);
+
 	avyuh *u=createList(2,1);
 	u->vector->data=G_I->vector->data-G_I->vector->data; 
 	u->next->vector->data=G_I->vector->next->data-G_I->vector->next->data;
+
+	// finding f value
 	avyuh *f=createList(1,1);
-        f->vector->data=-(r*r);
+	f->vector->data=sqrt( pow( G_I->vector->data-G_i->vector->data,2 ) + pow(G_I->vector->next->data-G_i->next->vector->data,2)  );
+	f->vector->data=-pow(f->vector->data,2);
 	avyuh *gh=Listadd( Listadd(  Listmul( Listmul(transposeList(h),V ),h ),Listscale( Listmul( transposeList(u),h ) ,2) ),f );
 	avyuh *sigmat=Listsub(Listmul( Listadd(Listmul(V,h),u) , transposeList(Listadd(Listmul(V,h),u)) ) ,Listscale(V,gh->vector->data));
 
 	avyuh *E_val=Listeigval(sigmat);
 	avyuh *P=Listeigvec(sigmat);
+
+
 	avyuh *u1=createList(2,1);
 	u1->vector->data=sqrt(fabs(E_val->next->vector->data));
 	u1->next->vector->data=sqrt(fabs(E_val->vector->data));
@@ -104,8 +106,7 @@ r=Listnorm(b3);
 	u2->vector->data=sqrt(fabs(E_val->next->vector->data));
 	u2->next->vector->data=-sqrt(fabs(E_val->vector->data));
 	
-	avyuh *m1=Listmul(P,u1); 	
-	avyuh *m2=Listmul(P,u2);
+	avyuh *m1=Listmul(P,u1); 	avyuh *m2=Listmul(P,u2);
 
 	avyuh *mu1n=Listmul(transposeList(m1),Listadd(Listmul(V,h),u));
 	avyuh *mu1d=Listmul(transposeList(m1),Listmul(V,m1));
@@ -121,7 +122,8 @@ r=Listnorm(b3);
 	
 	avyuh *E=Listadd(h,t1); avyuh *F=Listadd(h,t2);
 	
-	E->vector->data=E->vector->data+G_I->vector->data; 
+	//After finding the contact points , shifting them to the original Traingle points
+	E->vector->data=E->vector->data+G_I->vector->data;
 	E->next->vector->data=E->next->vector->data+G_I->vector->next->data;
 	F->vector->data=F->vector->data+G_I->vector->data; 
 	F->next->vector->data=F->next->vector->data+G_I->vector->next->data;
@@ -207,7 +209,7 @@ printf("u = \n");
 printList(u);
 printf("f = \n");
 printList(f);
-printf("gh = \n");
+/*printf("gh = \n");
 printList(gh);
 printf("sigmat = \n");
 printList(sigmat);
@@ -216,7 +218,7 @@ printList(E_val);
 printf("eigen vectors = \n");
 printList(P);
 
-/*
+
 printf("u1 = \n");
 printList(u1);
 printf("u2 = \n");
