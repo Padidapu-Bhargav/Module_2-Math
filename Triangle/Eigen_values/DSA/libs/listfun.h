@@ -11,8 +11,7 @@ sadish *Listvecscale(sadish *a,double k);//scale vector
 avyuh *Listinv(avyuh *mat, int m);//invert an m  x m matrix, m <=3
 avyuh *Listmul(avyuh *a, avyuh *b);//multiply matrices a and b      // 
 avyuh *rotList(double theta); //rotation matrix                     //
-avyuh *normVec(avyuh *a); //normal vector                           //
-void circulantList(avyuh *c, int m);
+avyuh *normVec(avyuh *a); //normal vector                           
 avyuh *Listsec(avyuh *a, avyuh * b, int m, double k);//section formula
 
 //double Listtrace(avyuh *a);
@@ -27,12 +26,74 @@ sadish *xtrtdiag(avyuh *a);//to extract diagonal vector from a matrix
 sadish *xtrtsqrtdiag(avyuh *a);//to extract sqrt diagonal vector from a matrix
 avyuh *Liststack(avyuh *a,avyuh *b);//concates list a,b horizontally and transposes the result
 avyuh *line_intersect(avyuh *a);//to find intersection point of lines (solving pair of linear equations)
-
-
+avyuh *Listeye(int k);//identity matrix
+avyuh *Listbasis(int k);//standard basis vector of length k
+avyuh *circulantList(avyuh *c);//circulant matrix
 double readidx(avyuh *a,int m,int n);//to read the value of an element at index (m,n)
+sadish *ListVecShift(sadish *a);//circulalry right shift vector
+avyuh *sample_assign(avyuh *secvec, avyuh *G_dis);
 //End function declaration
 
+//matrix assigning for the constant martix in angle bisector 
+avyuh *sample_assign(avyuh *secvec, avyuh *G_dis){
+	avyuh *sample2=createList(3,3);
 
+sample2->vector->data= -1;  
+sample2->vector->next->data=secvec->vector->next->next->data/G_dis->vector->next->next->data;
+sample2->vector->next->next->data=secvec->vector->next->data/G_dis->vector->data;
+sample2->next->vector->data=secvec->vector->next->next->data/G_dis->vector->next->data;
+sample2->next->vector->next->data=-1;
+sample2->next->vector->next->next->data=secvec->vector->data/G_dis->vector->data;
+sample2->next->next->vector->data=secvec->vector->next->data/G_dis->vector->next->data;
+sample2->next->next->vector->next->data=secvec->vector->data/G_dis->vector->next->next->data;
+sample2->next->next->vector->next->next->data=-1;
+return sample2;
+}
+
+//circulant matrix
+avyuh *circulantList(avyuh *a){
+	avyuh *c=(avyuh *)malloc(sizeof(avyuh));
+	avyuh *head = c;
+	sadish *ctemp;
+	ctemp=a->vector;
+	head->vector=a->vector;
+	for(sadish *temp=a->vector;temp->next!=NULL;temp=temp->next){
+			c->next = (avyuh *)malloc(sizeof(avyuh));
+			c->next->next=NULL;
+			c= c->next;
+		c->vector = ListVecShift(ctemp);
+		ctemp=c->vector;
+	}
+	return head;
+}
+//circulalry right shift vector
+sadish *ListVecShift(sadish *a){
+	sadish *tempa, *temp;
+	sadish *head = ListVecopy(a);
+	for(temp=head;temp->next->next!=NULL;temp=temp->next);
+temp->next->next = head;
+tempa = temp->next;
+temp->next = NULL;
+return tempa;
+}
+//standard basis vector of length k
+avyuh *Listbasis(int k){
+	avyuh *head=(avyuh *)malloc(sizeof(avyuh));
+	sadish *c = createVec(k);
+	head->vector = c;
+	head->next = NULL;
+	for(int i=0; i < k; i++){
+		c->data= 0;
+		c= c->next;
+	}
+	head->vector->data = 1;
+	return head;
+}
+//identity matrix
+avyuh *Listeye(int k){
+	avyuh *c=Listbasis(k);
+return circulantList(c);
+}
 //function to find the trace of matrix
 double Listtrace(avyuh *a)
 {
@@ -392,11 +453,21 @@ avyuh *Liststack(avyuh *a, avyuh *b){
 	return transposeList(head);
 }
 
-
+//Asssigning
+avyuh *assign(double a1, double a2, double b1, double b2){
+       avyuh *temp=createList(2,2);
+       temp->vector->data=a1;
+       temp->vector->next->data=a2;
+       temp->next->vector->data=b1;
+       temp->next->vector->next->data=b2;
+        
+       return temp;
+}
 
 // function to find the point of intersection of lines
 avyuh  *line_intersect(avyuh *a)
 {
+
 avyuh *temp = transposeList(a);
 double a1,a2,b1,b2,c1,c2;
 a1=temp->vector->data;
@@ -405,10 +476,21 @@ b1=temp->next->vector->data;
 b2=temp->next->vector->next->data;
 c1=-temp->next->next->vector->data;
 c2=-temp->next->next->vector->next->data;
-//printf("%lf,%lf,%lf,%lf,%lf,%lf,",a1,a2,b1,b2,c1,c2);
+
+double D,DX,DY;
+avyuh *temp1 =assign(a1,b1,a2,b2);
+D=Listdet(temp1);
+
+
+avyuh *temp2 =assign(b1,c1,b2,c2);
+DX=Listdet(temp2);
+
+avyuh *temp3 =assign(c1,a1,c2,a2);
+DY=Listdet(temp3);
+
 avyuh *head = createList(1,2);
-head->vector->data=(b1*c2-b2*c1)/(a1*b2-a2*b1);
-head->vector->next->data=(c1*a2-c2*a1)/(a1*b2-a2*b1);
+head->vector->data=DX/D;
+head->vector->next->data=DY/D;
 return head;
 
 }
@@ -418,7 +500,7 @@ return head;
 //function to read the value of element at index (m,n)
 double readidx(avyuh *a,int m,int n)
 {
-avyuh *head=a;
+avyuh *head=a';
 
 for(int i=0;i<m;i++)
 {
