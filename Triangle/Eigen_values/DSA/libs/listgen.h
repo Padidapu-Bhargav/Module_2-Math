@@ -29,7 +29,7 @@ avyuh *transposeList(avyuh *a);//transpose of a
 sadish *ListVecopy(sadish *a);//copy vector
 //End function declaration
 
-//copy a vector
+
 sadish *ListVecopy(sadish *a){
 	sadish *c= (sadish *)malloc(sizeof(sadish)), *head;
 	head = c; 
@@ -44,6 +44,8 @@ sadish *ListVecopy(sadish *a){
 	}
 	return head;
 }
+
+
 //Matrix transpose 
 avyuh *transposeList(avyuh *a){
 	int i=0;//dummy integer

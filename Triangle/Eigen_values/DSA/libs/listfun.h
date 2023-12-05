@@ -11,14 +11,15 @@ sadish *Listvecscale(sadish *a,double k);//scale vector
 avyuh *Listinv(avyuh *mat, int m);//invert an m  x m matrix, m <=3
 avyuh *Listmul(avyuh *a, avyuh *b);//multiply matrices a and b      // 
 avyuh *rotList(double theta); //rotation matrix                     //
-avyuh *normVec(avyuh *a); //normal vector                           
+avyuh *normVec(avyuh *a); //normal vector                           //
+avyuh *circulantList(avyuh *c);
 avyuh *Listsec(avyuh *a, avyuh * b, int m, double k);//section formula
 
-//double Listtrace(avyuh *a);
-//double Listdet(avyuh *a);
+double Listtrace(avyuh *a);
+double Listdet(avyuh *a);
 avyuh *Listquad(double a,double b,double c);
-//avyuh *Listeigval(avyuh *a);
-//avyuh *Listeigvec(avyuh *a);
+avyuh *Listeigval(avyuh *a);
+avyuh *Listeigvec(avyuh *a);
 avyuh *VertToList(avyuh *a,avyuh *b,avyuh *c);// points to list conversion
 avyuh *Listdiag(avyuh *a);//diagonal matrix
 avyuh *Listsqrtdiag(avyuh *a);//square root of elements in a diagonal matrix
@@ -26,11 +27,12 @@ sadish *xtrtdiag(avyuh *a);//to extract diagonal vector from a matrix
 sadish *xtrtsqrtdiag(avyuh *a);//to extract sqrt diagonal vector from a matrix
 avyuh *Liststack(avyuh *a,avyuh *b);//concates list a,b horizontally and transposes the result
 avyuh *line_intersect(avyuh *a);//to find intersection point of lines (solving pair of linear equations)
+avyuh *Listunit(avyuh *a);//unit vector
+avyuh *Listrow(avyuh *a, int k);// kth row
 avyuh *Listeye(int k);//identity matrix
 avyuh *Listbasis(int k);//standard basis vector of length k
-avyuh *circulantList(avyuh *c);//circulant matrix
-double readidx(avyuh *a,int m,int n);//to read the value of an element at index (m,n)
 sadish *ListVecShift(sadish *a);//circulalry right shift vector
+double readidx(avyuh *a,int m,int n);//to read the value of an element at index (m,n)
 avyuh *sample_assign(avyuh *secvec, avyuh *G_dis);
 //End function declaration
 
@@ -49,33 +51,25 @@ sample2->next->next->vector->next->data=secvec->vector->data/G_dis->vector->next
 sample2->next->next->vector->next->next->data=-1;
 return sample2;
 }
+// kth row
+avyuh *Listrow(avyuh *a, int k){
+	avyuh *c= (avyuh *)malloc(sizeof(avyuh)),*tempa=a,*head;
+	c->next=NULL;
+	head=c;
+	for(int i=0;i<k;i++){
+		tempa=tempa->next;  }
+	c->vector=tempa->vector;
 
-//circulant matrix
-avyuh *circulantList(avyuh *a){
-	avyuh *c=(avyuh *)malloc(sizeof(avyuh));
-	avyuh *head = c;
-	sadish *ctemp;
-	ctemp=a->vector;
-	head->vector=a->vector;
-	for(sadish *temp=a->vector;temp->next!=NULL;temp=temp->next){
-			c->next = (avyuh *)malloc(sizeof(avyuh));
-			c->next->next=NULL;
-			c= c->next;
-		c->vector = ListVecShift(ctemp);
-		ctemp=c->vector;
-	}
-	return head;
+	return transposeList(head);
+
 }
-//circulalry right shift vector
-sadish *ListVecShift(sadish *a){
-	sadish *tempa, *temp;
-	sadish *head = ListVecopy(a);
-	for(temp=head;temp->next->next!=NULL;temp=temp->next);
-temp->next->next = head;
-tempa = temp->next;
-temp->next = NULL;
-return tempa;
+//unit vector
+avyuh *Listunit(avyuh *a){
+	double k= Listnorm(a);
+	avyuh *c=Listscale(a, 1/k);//scale vector
+	return c;
 }
+
 //standard basis vector of length k
 avyuh *Listbasis(int k){
 	avyuh *head=(avyuh *)malloc(sizeof(avyuh));
@@ -94,6 +88,40 @@ avyuh *Listeye(int k){
 	avyuh *c=Listbasis(k);
 return circulantList(c);
 }
+
+//circulant matrix
+avyuh *circulantList(avyuh *a){
+	avyuh *c=(avyuh *)malloc(sizeof(avyuh));
+	avyuh *head = c;
+	sadish *ctemp;
+	ctemp=a->vector;
+	head->vector=a->vector;
+	for(sadish *temp=a->vector;temp->next!=NULL;temp=temp->next){
+			c->next = (avyuh *)malloc(sizeof(avyuh));
+			c->next->next=NULL;
+			c= c->next;
+		c->vector = ListVecShift(ctemp);
+		ctemp=c->vector;
+	}
+	return head;
+}
+
+//circulalry right shift vector
+sadish *ListVecShift(sadish *a){
+	sadish *tempa, *temp;
+	sadish *head = ListVecopy(a);
+	for(temp=head;temp->next->next!=NULL;temp=temp->next);
+temp->next->next = head;
+tempa = temp->next;
+temp->next = NULL;
+return tempa;
+}
+
+
+
+
+
+
 //function to find the trace of matrix
 double Listtrace(avyuh *a)
 {
@@ -107,12 +135,17 @@ return sumofdiag;
 }
 // end of function to find the trace of matrix
 
+
+
+
 //function to find det of 2x2 matrix
 double Listdet(avyuh *a)
 {
 return ((a->vector->data*a->next->vector->next->data)-(a->vector->next->data*a->next->vector->data));
 }
 // end of function to find the det of 2x2 matrix
+
+
 
 
 //function to find the roots of quadratic equation
@@ -129,6 +162,8 @@ return lam;
 //end of function to find the roots of quadratic equation
 
 
+
+
 //function to find the eigen values of a matrix
 avyuh *Listeigval(avyuh *a)
 {
@@ -138,40 +173,26 @@ return Listquad(1,b,c);
 }
 //end of functoin to find the eigen values
 
+
+
+
 // function to find eigen vectors 
 avyuh *Listeigvec(avyuh *a)
 {
 avyuh *lam=Listeigval(a);
-//printList(lam);
-avyuh *I=createList(2,2);
-I->vector->data=1 ;
-I->vector->next->data= 0;
-I->next->vector->data= 0;
-I->next->vector->next->data= 1;
 avyuh *omat=rotList(M_PI/2);
-//A-lambdaI
-avyuh *b1=Listadd(a,Listscale(I,-lam->vector->data));
-avyuh *b2=Listadd(a,Listscale(I,-lam->next->vector->data));
-
-avyuh *temp1=createList(2,1);   avyuh *temp2=createList(2,1);
-temp1->vector->data=b1->vector->data; 	temp1->next->vector->data=b1->vector->next->data;
-temp2->vector->data=b2->vector->data; 	temp2->next->vector->data=b2->vector->next->data;
-// for unit vector
-//double const1=sqrt(Listmul(transposeList(temp1),temp1)->vector->data);
-//double const2=sqrt(Listmul(transposeList(temp2),temp2)->vector->data);
-
-double const1=Listnorm(temp1);
-double const2=Listnorm(temp2);
-avyuh *c1=Listscale(temp1,1/const1);
-avyuh *c2=Listscale(temp2,1/const2);
+//A-lambdaI   approach 2
+avyuh *b1=Listadd(a,Listscale(Listeye(2),-lam->vector->data));
+avyuh *b2=Listadd(a,Listscale(Listeye(2),-lam->next->vector->data));
+// unit vector approach 3
+avyuh *c1 = Listunit(Listrow(b1,0));
+avyuh *c2 = Listunit(Listrow(b2,0));
 // find eigen vector
-avyuh *p1=Listmul(omat,c1);
-avyuh *p2=Listmul(omat,c2);
-
-return Liststack(transposeList(p1),transposeList(p2));
+avyuh *p1=transposeList(Listmul(omat,c1));
+avyuh *p2=transposeList(Listmul(omat,c2));
+return Liststack(p1,p2);
 }
 //end of function to find eigen vectors
-
 
 	
 //function to scale the vector with value k
@@ -191,6 +212,8 @@ sadish *head = (sadish *)malloc(sizeof(sadish)), *c, *tempa=a;
 return head;
 }
 //end of  function to scale a vector
+
+
 
 
 // function to scale a list with value k
@@ -214,6 +237,9 @@ avyuh *c= (avyuh *)malloc(sizeof(avyuh)), *head;
 //end of function to scale  a list 
 
 
+
+
+
 //inner product
 double ListVecdot(sadish *a, sadish *b){
 	double val = 0;
@@ -225,9 +251,17 @@ double ListVecdot(sadish *a, sadish *b){
 	}
 	return val;
 }
+
+
+
 double Listdot(avyuh *a, avyuh *b){
-	return ListVecdot(a->vector, b->vector);
+	return Listmul(transposeList(a),b)->vector->data ;
+
 }
+
+
+
+
 sadish *ListVecsub(sadish *a, sadish *b){
 	sadish *head = (sadish *)malloc(sizeof(sadish)), *c,  *tempb=b;
 	c = head; 
@@ -244,6 +278,9 @@ sadish *ListVecsub(sadish *a, sadish *b){
 	}
 	return head;
 }
+
+
+
 
 //subtract two matrices
 avyuh *Listsub(avyuh *a, avyuh *b){
@@ -264,6 +301,8 @@ avyuh *Listsub(avyuh *a, avyuh *b){
 }
 
 
+
+
 sadish *ListVecadd(sadish *a, sadish *b){
         sadish *head = (sadish *)malloc(sizeof(sadish)), *c, *tempb=b;
         c = head; 
@@ -280,6 +319,10 @@ sadish *ListVecadd(sadish *a, sadish *b){
         }
         return head;
 }
+
+
+
+
 
 //add two matrices
 avyuh *Listadd(avyuh *a, avyuh *b){
@@ -308,6 +351,8 @@ double Listnorm(avyuh *a){
 	return sqrt(Listdot(a,a));
 }
 
+
+
 //rotation matrix
 avyuh *rotList(double theta){ 
 avyuh *head = createList(2,2), *temp;//create empty 2 x 2 matrix 
@@ -324,6 +369,9 @@ row2->next->data = c;
 return head;
 
 }
+
+
+
 
 avyuh *VertToList(avyuh *a,avyuh *b,avyuh *c)
 {
@@ -343,6 +391,8 @@ r2->next->next->data =Vecind(c->vector,1)->data;
 
 return head;
 }
+
+
 
 
 //Matrix multiplication
@@ -374,6 +424,9 @@ return head;
 }
 
 
+
+
+
 //function to find the diagonal matrix
 avyuh *Listdiag(avyuh *a){
 	avyuh *head= (avyuh *)malloc(sizeof(avyuh)), *alist;
@@ -381,6 +434,9 @@ avyuh *Listdiag(avyuh *a){
 	head->next= NULL;
 return head;
 }
+
+
+
 //function to extract diagonal vector from the matrix
 sadish *xtrtdiag(avyuh *a){
 	int i = 0,j = 0;//dummy integers
@@ -411,6 +467,9 @@ avyuh *Listsqrtdiag(avyuh *a){
         head->next= NULL;
 return head;   
 } 
+
+
+
 //function to extract sqrt diagonal vector from a matrix
 sadish *xtrtsqrtdiag(avyuh *a){
         int i = 0,j = 0;//dummy integers
@@ -500,7 +559,7 @@ return head;
 //function to read the value of element at index (m,n)
 double readidx(avyuh *a,int m,int n)
 {
-avyuh *head=a';
+avyuh *head=a;
 
 for(int i=0;i<m;i++)
 {
@@ -514,4 +573,7 @@ double val = Vecind(head->vector,n)->data;
 return val;
 }
 */
+
+
+
 
