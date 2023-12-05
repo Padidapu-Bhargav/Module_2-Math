@@ -55,29 +55,18 @@ avyuh *R_o = rotList(M_PI/2);
 	 	avyuh *G_O=line_intersect(linemat_perp_bis);
 //*****************************ANGULAR BISECTOR*************************************
 		avyuh *secvec=Listmul(G_dis,C_in);
-		avyuh *i_con = createList(3,3);
-        sadish *r1,*r2,*r3;
-        r1=i_con->vector;
-        r2=i_con->next->vector;
-        r3=i_con->next->next->vector;
-r1->data= -1;  
-r1->next->data=secvec->vector->next->next->data/G_dis->vector->next->next->data;
-r1->next->next->data=secvec->vector->next->data/G_dis->vector->data;
-r2->data=secvec->vector->next->next->data/G_dis->vector->next->data;
-r2->next->data=-1;
-r2->next->next->data=secvec->vector->data/G_dis->vector->data;
-r3->data=secvec->vector->next->data/G_dis->vector->next->data;
-r3->next->data=secvec->vector->data/G_dis->vector->next->next->data;
-r3->next->next->data=-1;
+		avyuh *i_con =sample_assign(secvec,G_dis);
 		avyuh *a_dir=Listmul(G_v,i_con);
 		avyuh *a_nor=Listmul(R_o,a_dir);
                 avyuh *a_cof= Listdiag(Listmul(transposeList(a_nor),G_v));
                 avyuh *a_line=Liststack(a_nor,a_cof);
                 avyuh *a_i=line_intersect(a_line);
 		avyuh *cont_mat=i_con;
+
 cont_mat->vector->data=0;
 cont_mat->next->vector->next->data=0;
 cont_mat->next->next->vector->next->next->data=0;
+
 		avyuh *G_i=Listmul(G_v,cont_mat);
 		avyuh *G_imid=Listmul(G_i,C_mid);
 		avyuh *G_idir_alt = Listmul(G_i,C_alt);
@@ -92,19 +81,12 @@ double r;
 avyuh *b3=Listsub(G_I,z);// subtracted matrix I-D3
 r=Listnorm(b3);
 
-
-
-
-
 //******************Eigen value approach to find contact points********************************
 	avyuh *h=createList(2,1);
 	h->vector->data=G_v->vector->data-G_I->vector->data; 
 	h->next->vector->data=G_v->next->vector->data-G_I->vector->next->data;
 	avyuh *V=createList(2,2);
-	V->vector->data=1;
-	V->vector->next->data=0;
-	V->next->vector->data=0;
-	V->next->vector->next->data=1;
+	V=Listeye(2);
 	avyuh *u=createList(2,1);
 	u->vector->data=G_I->vector->data-G_I->vector->data; 
 	u->next->vector->data=G_I->vector->next->data-G_I->vector->next->data;
@@ -115,12 +97,6 @@ r=Listnorm(b3);
 
 	avyuh *E_val=Listeigval(sigmat);
 	avyuh *P=Listeigvec(sigmat);
-//	avyuh *P=createList(2,2);
-//	P->vector->data=-0.52573111 ;
-//	P->vector->next->data= -0.85065081;
-//	P->next->vector->data= -0.85065081;
-//	P->next->vector->next->data= 0.52573111;
-
 	avyuh *u1=createList(2,1);
 	u1->vector->data=sqrt(fabs(E_val->next->vector->data));
 	u1->next->vector->data=sqrt(fabs(E_val->vector->data));
@@ -128,7 +104,8 @@ r=Listnorm(b3);
 	u2->vector->data=sqrt(fabs(E_val->next->vector->data));
 	u2->next->vector->data=-sqrt(fabs(E_val->vector->data));
 	
-	avyuh *m1=Listmul(P,u1); 	avyuh *m2=Listmul(P,u2);
+	avyuh *m1=Listmul(P,u1); 	
+	avyuh *m2=Listmul(P,u2);
 
 	avyuh *mu1n=Listmul(transposeList(m1),Listadd(Listmul(V,h),u));
 	avyuh *mu1d=Listmul(transposeList(m1),Listmul(V,m1));
