@@ -98,7 +98,7 @@ cont_mat->next->next->vector->next->next->data=0;
 	f->vector->data=sqrt( pow( G_I->vector->data-G_i->vector->data,2 ) + pow(G_I->vector->next->data-G_i->next->vector->data,2)  );
 	f->vector->data=-pow(f->vector->data,2);
 
-	//g(h)= transpose(h)*h*V + 2*transpose(u)*x + f
+	//g(h)= transpose(h)*h*V + 2*transpose(u)*h + f
 	avyuh *gh=Listadd( Listadd(  Listmul( Listmul(transposeList(h),V ),h ),Listscale( Listmul( transposeList(u),h ) ,2) ),f );
 
 	//sigma= (V*h +u) * transpose(Vh+u) - g(h)*V
