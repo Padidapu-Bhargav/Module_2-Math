@@ -78,51 +78,87 @@ cont_mat->next->next->vector->next->next->data=0;
 
 //******************Eigen value approach to find contact points********************************
 	avyuh *h=createList(2,1);
-	//shifting the incentre to origin for finding the eigen values
+
+	//shifting the A in such a way that the Incentre is at origin 
+	//and then finding the eigen values
 	h->vector->data=G_v->vector->data-G_I->vector->data; 
 	h->next->vector->data=G_v->next->vector->data-G_I->vector->next->data;
+
+	// v= [[1,0],[0,1]] 2x2 identity matrix
 	avyuh *V=createList(2,2);
 	V=Listeye(2);
-
+	
+	// shifting the Incentre to the origin
 	avyuh *u=createList(2,1);
 	u->vector->data=G_I->vector->data-G_I->vector->data; 
 	u->next->vector->data=G_I->vector->next->data-G_I->vector->next->data;
 
-	// finding f value
+	// finding f value f=-(radius*radius)
 	avyuh *f=createList(1,1);
 	f->vector->data=sqrt( pow( G_I->vector->data-G_i->vector->data,2 ) + pow(G_I->vector->next->data-G_i->next->vector->data,2)  );
 	f->vector->data=-pow(f->vector->data,2);
-	avyuh *gh=Listadd( Listadd(  Listmul( Listmul(transposeList(h),V ),h ),Listscale( Listmul( transposeList(u),h ) ,2) ),f );
-	avyuh *sigmat=Listsub(Listmul( Listadd(Listmul(V,h),u) , transposeList(Listadd(Listmul(V,h),u)) ) ,Listscale(V,gh->vector->data));
 
+	//g(h)= transpose(h)*h*V + 2*transpose(u)*x + f
+	avyuh *gh=Listadd( Listadd(  Listmul( Listmul(transposeList(h),V ),h ),Listscale( Listmul( transposeList(u),h ) ,2) ),f );
+
+	//sigma= (V*h +u) * transpose(Vh+u) - g(h)*V
+	avyuh *sigmat=Listsub(Listmul( Listadd(Listmul(V,h),u) , transposeList(Listadd(Listmul(V,h),u)) ) ,Listscale(V,gh->vector->data));
+        
+	// E_val contains the eigen values
 	avyuh *E_val=Listeigval(sigmat);
+
+	//P contains the Eigen vectors
 	avyuh *P=Listeigvec(sigmat);
 
-
+        //u1=[+sqrt(lamda2) , +sqrt(lamda1)]
 	avyuh *u1=createList(2,1);
 	u1->vector->data=sqrt(fabs(E_val->next->vector->data));
 	u1->next->vector->data=sqrt(fabs(E_val->vector->data));
+
+	//u2=[-sqrt(lamda2) , -sqrt(lamda2)]
 	avyuh *u2=createList(2,1);
 	u2->vector->data=sqrt(fabs(E_val->next->vector->data));
 	u2->next->vector->data=-sqrt(fabs(E_val->vector->data));
 	
-	avyuh *m1=Listmul(P,u1); 	avyuh *m2=Listmul(P,u2);
+	//m1 = P*u1
+	avyuh *m1=Listmul(P,u1); 	
+        
+	//m2 = P*u2
+	avyuh *m2=Listmul(P,u2);
 
+	//mu1n (numerator) = (transpose(m1)*(V*h + u)) 
+	//mu1d (denominator) =(transpose(m1) * V * m1)
 	avyuh *mu1n=Listmul(transposeList(m1),Listadd(Listmul(V,h),u));
 	avyuh *mu1d=Listmul(transposeList(m1),Listmul(V,m1));
+	//mu1 = -mu1n /mu1d
 	double mu1=-mu1n->vector->data/mu1d->vector->data;
 
+	//mu2n (numerator) = (transpose(m2)*(V*h + u)) 
+	//mu2d (denominator) =(transpose(m2) * V * m2)
 	avyuh *mu2n=Listmul(transposeList(m2),Listadd(Listmul(V,h),u));
 	avyuh *mu2d=Listmul(transposeList(m2),Listmul(V,m2));
+	//mu2 = -mu2n /mu2d
 	double mu2=-(mu2n->vector->data/mu2d->vector->data);
 	
-	avyuh *t1=createList(2,1); 	avyuh *t2=createList(2,1);
-	t1->vector->data=mu1*m1->vector->data; t1->next->vector->data=mu1*m1->next->vector->data;
-	t2->vector->data=mu2*m2->vector->data; t2->next->vector->data=mu2*m2->next->vector->data;
+	avyuh *t1=createList(2,1); 	
+        avyuh *t2=createList(2,1);
+
+        //t1 = mu1*m1
+	t1->vector->data=mu1*m1->vector->data; 
+	t1->next->vector->data=mu1*m1->next->vector->data;
+        
+	//t2 = mu2*m2
+	t2->vector->data=mu2*m2->vector->data; 
+	t2->next->vector->data=mu2*m2->next->vector->data;
 	
-	avyuh *E=Listadd(h,t1); avyuh *F=Listadd(h,t2);
+	//E = h + t1
+	avyuh *E=Listadd(h,t1);
+
+	//F = h + t2
+	avyuh *F=Listadd(h,t2);
 	
-	//After finding the contact points , shifting them to the original Traingle points
+	//After finding the contact points  from shifted points (A , incentre)
+	//we have to shift back the contact points to its original points i.e E3+I , F3+I
 	E->vector->data=E->vector->data+G_I->vector->data;
 	E->next->vector->data=E->next->vector->data+G_I->vector->next->data;
 	F->vector->data=F->vector->data+G_I->vector->data; 
