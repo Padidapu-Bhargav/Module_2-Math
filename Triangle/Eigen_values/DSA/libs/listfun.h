@@ -32,8 +32,8 @@ avyuh *Listrow(avyuh *a, int k);// kth row
 avyuh *Listeye(int k);//identity matrix
 avyuh *Listbasis(int k);//standard basis vector of length k
 sadish *ListVecShift(sadish *a);//circulalry right shift vector
-avyuh *assign_at_idx(avyuh *a,int m,int n,double value);//to read the value of an element at index (m,n)
-avyuh *divide_at_idx(avyuh *a,int m,int n,double value);//to read the value of an element at index (m,n)
+avyuh *assign_at_idx(avyuh *a,int m,int n,double value);// Assigning the given valie at an index m x n
+avyuh *divide_at_idx(avyuh *a,int m,int n,double value);// Dividing the value at the index m x n by the parameter value
 avyuh *sample_assign(avyuh *secvec, avyuh *G_dis);
 avyuh *circulantList(avyuh *c);//circulant matrix
 //End function declaration
