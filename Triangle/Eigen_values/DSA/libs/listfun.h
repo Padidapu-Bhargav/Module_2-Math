@@ -32,24 +32,103 @@ avyuh *Listrow(avyuh *a, int k);// kth row
 avyuh *Listeye(int k);//identity matrix
 avyuh *Listbasis(int k);//standard basis vector of length k
 sadish *ListVecShift(sadish *a);//circulalry right shift vector
-double readidx(avyuh *a,int m,int n);//to read the value of an element at index (m,n)
+avyuh *assign_at_idx(avyuh *a,int m,int n,double value);//to read the value of an element at index (m,n)
+avyuh *divide_at_idx(avyuh *a,int m,int n,double value);//to read the value of an element at index (m,n)
 avyuh *sample_assign(avyuh *secvec, avyuh *G_dis);
+avyuh *circulantList(avyuh *c);//circulant matrix
 //End function declaration
 
-//matrix assigning for the constant martix in angle bisector 
-avyuh *sample_assign(avyuh *secvec, avyuh *G_dis){
-	avyuh *sample2=createList(3,3);
 
-sample2->vector->data= -1;  
-sample2->vector->next->data=secvec->vector->next->next->data/G_dis->vector->next->next->data;
-sample2->vector->next->next->data=secvec->vector->next->data/G_dis->vector->data;
-sample2->next->vector->data=secvec->vector->next->next->data/G_dis->vector->next->data;
-sample2->next->vector->next->data=-1;
-sample2->next->vector->next->next->data=secvec->vector->data/G_dis->vector->data;
-sample2->next->next->vector->data=secvec->vector->next->data/G_dis->vector->next->data;
-sample2->next->next->vector->next->data=secvec->vector->data/G_dis->vector->next->next->data;
-sample2->next->next->vector->next->next->data=-1;
-return sample2;
+
+//sample_assign function using logic
+avyuh  *sample_assign(avyuh *secvec,avyuh *G_dis){
+
+	avyuh *assign=createList(3,3);
+	avyuh *final_assign=createList(3,3);
+	int i=-1;
+	int j=-1;
+
+        /* 
+	   -1  p  n
+	    p -1  m
+	    n  m -1 
+	*/
+
+	for(avyuh *row=assign; row!=NULL;row=row->next)
+	{    i++;
+
+		for(avyuh *column=assign;column!=NULL;column=column->next){
+		
+			j++;
+
+            if ((i == 0 || i == 1) && (j == 0 || j == 1) && (i != j))
+                 final_assign=assign_at_idx(final_assign,i,j,secvec->vector->next->next->data);
+            else if ((i == 0 || i == 2) && (j == 0 || j == 2) && (i != j))
+                 final_assign=assign_at_idx(final_assign,i,j,secvec->vector->next->data);
+            else if ((i == 2 || i == 1) && (j == 2 || j == 1) && (i != j))
+                final_assign= assign_at_idx(final_assign,i,j,secvec->vector->data);
+            else
+                final_assign= assign_at_idx(final_assign,i,j,-1);
+		}
+		j=-1;
+	}
+        
+        /* 
+	    -1    p/c   n/a
+	    p/b   -1    m/a
+	    n/b   m/c   -1   
+	*/
+	 i=-1;
+	 j=-1;
+	for(avyuh *row=assign; row!=NULL;row=row->next)
+	{    i++;
+
+		for(avyuh *column=assign;column!=NULL;column=column->next){
+		
+			j++;
+
+            if (j==0 && i!=j)
+                 final_assign=divide_at_idx(final_assign,i,j,G_dis->vector->next->data);
+            if (j==1 && i!=j)
+                 final_assign=divide_at_idx(final_assign,i,j,G_dis->vector->next->next->data);
+            if (j==2 && i!=j)
+                final_assign= divide_at_idx(final_assign,i,j,G_dis->vector->data);
+            if (i==j)
+                final_assign= divide_at_idx(final_assign,i,j,1);
+		}
+		j=-1;
+	}
+	return final_assign;
+}
+
+//Assigning value at a particular index
+avyuh *assign_at_idx(avyuh *a,int m,int n,double value)
+{
+avyuh *head=a;
+sadish *row=a->vector;
+for(int i=0;i<m;i++)
+{
+	 head=head->next;
+}
+
+Vecind(head->vector,n)->data=value;
+return a;
+
+}
+
+// divide the value at an index with the mentioned value in the parameter
+avyuh *divide_at_idx(avyuh *a,int m,int n,double value)
+{
+avyuh *head=a;
+sadish *row=a->vector;
+for(int i=0;i<m;i++)
+{
+	 head=head->next;
+}
+
+Vecind(head->vector,n)->data=Vecind(head->vector,n)->data/value;
+return a;
+
 }
 // kth row
 avyuh *Listrow(avyuh *a, int k){
@@ -551,29 +630,4 @@ avyuh *head = createList(1,2);
 head->vector->data=DX/D;
 head->vector->next->data=DY/D;
 return head;
-
 }
-
-
-/*
-//function to read the value of element at index (m,n)
-double readidx(avyuh *a,int m,int n)
-{
-avyuh *head=a;
-
-for(int i=0;i<m;i++)
-{
-head=head->next;
-}
-//for (int j=0;j<n;j++)
-//{
-//head->vector=head->vector->next;
-//}
-double val = Vecind(head->vector,n)->data;
-return val;
-}
-*/
-
-
-
-
