@@ -35,6 +35,7 @@ avyuh *R_o = rotList(M_PI/2);
 		avyuh *G_dir=VertToList(M1,M2,M3);
 		avyuh *G_n=Listmul(R_o,G_dir);
 		avyuh *G_con= Listdiag(Listmul(transposeList(G_n),G_v));
+		avyuh *G_con1=circulantList(G_v);
 		avyuh *G_dis= Listsqrtdiag(Listmul(transposeList(G_dir),G_dir));
 		avyuh *G_line=Liststack(G_n,G_con);
 //************************************MEDIANS***************************************
@@ -54,7 +55,8 @@ avyuh *R_o = rotList(M_PI/2);
 	 	avyuh *linemat_perp_bis=Liststack(G_n_alt,cmat_perp_bis);
 	 	avyuh *G_O=line_intersect(linemat_perp_bis);
 //*****************************ANGULAR BISECTOR*************************************
-		avyuh *secvec=Listmul(G_dis,C_in);
+		avyuh *secvec=Listmul(G_dis,C_in); //m, n , p values
+		
 		avyuh *i_con = sample_assign(secvec,G_dis);
 
 		avyuh *a_dir=Listmul(G_v,i_con);
@@ -98,7 +100,7 @@ cont_mat->next->next->vector->next->next->data=0;
 	f->vector->data=sqrt( pow( G_I->vector->data-G_i->vector->data,2 ) + pow(G_I->vector->next->data-G_i->next->vector->data,2)  );
 	f->vector->data=-pow(f->vector->data,2);
 
-	//g(h)= transpose(h)*h*V + 2*transpose(u)*h + f
+	//g(h)= transpose(h)*h*V + 2*transpose(u)*x + f
 	avyuh *gh=Listadd( Listadd(  Listmul( Listmul(transposeList(h),V ),h ),Listscale( Listmul( transposeList(u),h ) ,2) ),f );
 
 	//sigma= (V*h +u) * transpose(Vh+u) - g(h)*V
@@ -248,14 +250,14 @@ printList(f);
 /*printf("gh = \n");
 printList(gh);
 printf("sigmat = \n");
-printList(sigmat);
+printList(sigmat);*/
 printf("eigen values = \n");
 printList(E_val);
 printf("eigen vectors = \n");
 printList(P);
 
 
-printf("u1 = \n");
+/*printf("u1 = \n");
 printList(u1);
 printf("u2 = \n");
 printList(u2);
