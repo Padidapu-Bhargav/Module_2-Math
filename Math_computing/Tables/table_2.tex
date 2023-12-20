@@ -2,14 +2,29 @@
 \hline
 \textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
 \hline
-	$r1$ & $\norm{B-D}$ & Length of $\vec{BD}$ \\
+	$\vec{BD}$ & $\norm{B-D}$ & Length of $\vec{BD}$ \\
 \hline
-	$\vec{A}$ & $\vec{D}$ + $\myvec{-r1 \cos \theta  \\ r1 \sin \theta}$ & From point $\vec{D}$ makes an angle $\theta$ in clock-wise with line $\vec{(AD, AB)}$  \\
+	$\vec{CD}$ & $\norm{C-D}$ & Length of $\vec{CD}$ \\
+\hline
+	$\alpha$ & $\frac{180 - \theta}{2}$ & Angle $\vec{ABD}$ \\
+\hline
+	$\vec{AB}$ & $\vec{BD} \frac{\sin \alpha}{\sin \theta}$ &  Length of $\vec{AB}$ \\
+\hline
+	$\vec{A}$ & $\vec{B}$ + $\myvec{\vec{AB} \cos \alpha  \\ \vec{AB} \sin \alpha}$ & point $\vec{B}$ makes an angle $\alpha$  with line $(\vec{AB} ,\vec{BD})$  \\
+\hline
+	$\vec{AD}$ & $\norm{A-D}$ & Length of $\vec{AD}$ \\
+\hline
+	$\vec{AC}$ & $\norm{A-C}$ & Length of $\vec{AC}$ \\
 \hline
 	  
-	$r1$ & $\norm{B-D}$ & Length of $\vec{BD}$ \\
-\hline       
-	$\vec{E}$ & $\vec{D}$ + $\myvec{r2 \cos \theta  \\ r2 \sin \theta}$ & From point $\vec{D}$ makes an angle $\theta$ in anticlock-wise with line $\vec{(AC, CE)}$  \\  
+	$\beta 1$ & $\cos^{-1} \frac{\vec{AC^2 +CD^2 - AD^2}}{\vec{2 AC AD}}$ & Angle $\vec{ACD}$ \\
+\hline
+	$\vec{CE}$ & $\vec{AC} \frac{\sin \theta}{\sin \alpha}$ &  Length of $\vec{CE}$ \\
+\hline
+	$\beta$ & $\alpha + \beta 1 $ & Angle $\vec{ECB}$\\
+
+\hline
+	$\vec{E}$ & $\vec{C}$ + $\myvec{\vec{-CE} \cos \beta  \\ \vec{CE} \sin \beta}$ & point $\vec{C}$ makes an angle $\beta$  with line $(\vec{BC} ,\vec{CE})$  \\
 \hline
 
 \end{tabular}
